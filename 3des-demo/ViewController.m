@@ -27,6 +27,9 @@
     //应该返回 VW7v3uajdIMABXB2oeq/EA==
     NSLog(@"encoded:%@", encoded);
     
+    NSString * decoded =  [self doSKCipher:encoded enc:kCCDecrypt key:base64Key iv:base64Iv];
+    NSLog(@"decoded:%@", decoded);
+    
 }
 
 - (NSString*)doSKCipher:(NSString*)plainText enc:(CCOperation)encryptOrDecrypt key:(NSString *)keyInput iv:(NSString *)ivInput {
@@ -39,7 +42,7 @@
     NSData *decodedIv = [[NSData alloc] initWithBase64EncodedString:ivInput options:0];
     
     if (encryptOrDecrypt == kCCDecrypt) {
-        NSData *EncryptData =[[plainText dataUsingEncoding:NSUTF8StringEncoding] base64EncodedDataWithOptions:0];
+        NSData *EncryptData = [[NSData alloc] initWithBase64EncodedString:plainText options:0];
         plainTextBufferSize = [EncryptData length];
         vplainText = [EncryptData bytes];
     } else {
@@ -92,7 +95,6 @@
         result = [ [NSString alloc] initWithData: [NSData dataWithBytes:(const void *)bufferPtr length:(NSUInteger)movedBytes] encoding:NSASCIIStringEncoding];
     } else {
         NSData *myData = [NSData dataWithBytes:(const void *)bufferPtr length:(NSUInteger)movedBytes];
-        NSLog(@"data is: %@", myData);
         result = [myData base64EncodedStringWithOptions:0];
 
     }
